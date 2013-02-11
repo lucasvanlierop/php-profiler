@@ -12,7 +12,7 @@ use Zend_Log as Logger;
  * @todo make log writer flexible (support both zend log and symfony log)
  * @todo make log level configurable
  */
-class PhpProfiler
+class Profiler
 {
     const FOREGROUND_COLOR_CODE_YELLOW = '1;33';
     const FOREGROUND_COLOR_CODE_RED = '0;31';
@@ -55,7 +55,7 @@ class PhpProfiler
     }
 
     /**
-     * @return EngineBlock_Profiler
+     * @return \Lvl\Profiler
      * @throws Exception
      */
     public static function getInstance()
