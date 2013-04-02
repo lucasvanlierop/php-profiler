@@ -281,8 +281,10 @@ class Profiler
 
     public function logReport()
     {
+        $logCallback = $this->logCallback;
         foreach (explode(PHP_EOL, $this->getReport()) as $line) {
-            $this->logCallback($line);
+
+            $logCallback($line);
         }
     }
 }
