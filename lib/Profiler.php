@@ -1,9 +1,6 @@
 <?php
 namespace Lvl;
 
-use Zend_Log as Logger;
-
-// @todo make this optional
 //use Doctrine\DBAL\Logging\SQLLogger;
 
 /**
@@ -24,10 +21,8 @@ class Profiler
 
     private static $bootstrapStartTime;
 
-    /**
-     * @var Zend_Log
-     */
-    private $logger;
+    /** @var callable */
+    private $logCallback;
 
     /** @var array */
     private $records;
@@ -40,10 +35,8 @@ class Profiler
 
     private static $instance;
 
-    public function __construct(Logger $logger)
+    public function __construct()
     {
-        $this->logger = $logger;
-
         $this->records = array();
         if (self::$bootstrapStartTime) {
             $this->addRecord('Bootstrap / Routing', self::$bootstrapStartTime);
@@ -52,6 +45,14 @@ class Profiler
         $this->isStarted = false;
 
         self::$instance = $this;
+    }
+
+    /**
+     * @param callable $logCallback
+     */
+    public function setLogCallback($logCallback)
+    {
+        $this->logCallback = $logCallback;
     }
 
     /**
@@ -281,7 +282,7 @@ class Profiler
     public function logReport()
     {
         foreach (explode(PHP_EOL, $this->getReport()) as $line) {
-            $this->logger->debug($line);
+            $this->logCallback($line);
         }
     }
 }
