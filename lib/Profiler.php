@@ -201,7 +201,7 @@ class Profiler
                     'number' => $record['number'],
                     'name' => $record['name'],
                     'milliseconds' => round($taskTime * 1000),
-                    'percentage' => str_pad(round(($taskTime / $totalTime) * 100), 2, ' ', STR_PAD_LEFT),
+                    'percentage' => round(($taskTime / $totalTime) * 100),
                 );
             }
 
