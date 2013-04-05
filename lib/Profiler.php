@@ -219,11 +219,15 @@ class Profiler
         $totalPeakMem = memory_get_peak_usage();
         $totalPeakMemFormatted = str_pad(round($totalPeakMem / (1024 * 1024), 2) . 'MB', 8, ' ', STR_PAD_LEFT);
         $totalTimeFormatted = round($totalTime, 2);
+
+        $uri = str_pad(substr($_SERVER['REQUEST_URI'],0, 107), 107, ' ', STR_PAD_RIGHT);
+
         $report = <<<TEXT
 
 
-########### {$this->title} {$totalTimeFormatted}s total, {$totalPeakMemFormatted} ###########
-REQUEST: {$_SERVER['REQUEST_URI']}
+Profiled '{$this->title}' {$totalTimeFormatted}s total, {$totalPeakMemFormatted}                                     |
++----------------------------------------------------------------------------------------------------------------------+
++ REQUEST: {$uri} |
 +-----+--------------+--------------+----------+-----------------------------------------------------------------------+
 | Nr  | Proc Time    | Memo diff.   | Peak mem | Title                                                                 |
 +-----+--------------+--------------+----------+-----------------------------------------------------------------------+
