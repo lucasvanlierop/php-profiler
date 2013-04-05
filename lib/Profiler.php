@@ -13,7 +13,7 @@ class Profiler
 {
     const FOREGROUND_COLOR_CODE_YELLOW = '1;33';
     const FOREGROUND_COLOR_CODE_RED = '0;31';
-    const FOREGROUND_COLOR_CODE_CYAN = '1;35';
+    const FOREGROUND_COLOR_CODE_BROWN = '0;33';
 
     // @todo make these the same?
     const START_RECORD = 'start';
@@ -265,7 +265,7 @@ class Profiler
         if ($percentage > 40) {
             return self::FOREGROUND_COLOR_CODE_RED;
         } elseif ($percentage > 20) {
-            return self::FOREGROUND_COLOR_CODE_CYAN;
+            return self::FOREGROUND_COLOR_CODE_BROWN;
         } elseif ($percentage > 10) {
             return self::FOREGROUND_COLOR_CODE_YELLOW;
         }
