@@ -220,7 +220,7 @@ class Profiler
         $totalPeakMemFormatted = str_pad(round($totalPeakMem / (1024 * 1024), 2) . 'MB', 8, ' ', STR_PAD_LEFT);
         $totalTimeFormatted = round($totalTime, 2);
 
-        $uri = str_pad(substr($_SERVER['REQUEST_URI'],0, 107), 107, ' ', STR_PAD_RIGHT);
+        $uri = str_pad(substr($_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],0, 107), 107, ' ', STR_PAD_RIGHT);
 
         $report = <<<TEXT
 
