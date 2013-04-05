@@ -240,7 +240,8 @@ TEXT;
 
             $memusagediffPercentage = round(($record['memusagediff'] / $totalPeakMem) * 100);
 
-            $memDiffFormatted = str_pad(round($record['memusagediff'] / (1024 * 1024), 2) . 'MB (' . $memusagediffPercentage . '%)', 12, ' ', STR_PAD_LEFT);
+            $memusagediffPercentageFormatted = str_pad('(' . $memusagediffPercentage . '%)', 5, ' ', STR_PAD_LEFT);
+            $memDiffFormatted = str_pad(round($record['memusagediff'] / (1024 * 1024), 2) . 'MB '. $memusagediffPercentageFormatted, 12, ' ', STR_PAD_LEFT);
 
             // @todo make this optional
             // Show memory consuming blocks in different colors
@@ -251,7 +252,8 @@ TEXT;
             }
 
             $percentage = $record['percentage'];
-            $timeFormatted = str_pad($record['milliseconds'] . "ms ({$percentage}%)", 12, ' ', STR_PAD_LEFT);
+            $percentageFormatted = str_pad('(' . $percentage . '%)', 5, ' ', STR_PAD_LEFT);
+            $timeFormatted = str_pad($record['milliseconds'] . "ms " . $percentageFormatted, 12, ' ', STR_PAD_LEFT);
 
             // @todo make this optional
             // Show Time consuming blocks in different colors
