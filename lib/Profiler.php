@@ -224,7 +224,10 @@ class Profiler
 
 ########### {$this->title} {$totalTimeFormatted}s total, {$totalPeakMemFormatted} ###########
 REQUEST: {$_SERVER['REQUEST_URI']}
-| Nr    |     Processing Time  | Memory usage diff.   |         Memory usage | Title
++-------+----------------------+----------------------+----------------------+-----------------------------------------+
+| Nr    |     Processing Time  | Memory usage diff.   |         Memory usage | Title                                   |
++-------+----------------------+----------------------+----------------------+-----------------------------------------+
+
 TEXT;
         foreach ($topTimes as $record) {
             $numberFormatted = str_pad($record['number'], 5, ' ', STR_PAD_LEFT);
@@ -252,8 +255,13 @@ TEXT;
                 $timeFormatted = $this->colorString($timeFormatted, $timeColorCode);
             }
 
-            $report .= $row = PHP_EOL . "| {$numberFormatted} | {$timeFormatted} | {$memDiffFormatted} | {$peakMemFormatted} | \"{$record['name']}\" ";
+            $nameFormatted = str_pad(substr($record['name'], 0, 39), 39, ' ', STR_PAD_RIGHT);
+            $report .= $row = "| {$numberFormatted} | {$timeFormatted} | {$memDiffFormatted} | {$peakMemFormatted} | {$nameFormatted} |" . PHP_EOL;
         }
+
+$report .= <<<TEXT
++-------+----------------------+----------------------+----------------------+-----------------------------------------+
+TEXT;
 
         return $report;
     }
