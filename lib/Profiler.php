@@ -224,18 +224,19 @@ class Profiler
 
 ########### {$this->title} {$totalTimeFormatted}s total, {$totalPeakMemFormatted} ###########
 REQUEST: {$_SERVER['REQUEST_URI']}
-+-------+----------------------+----------------------+----------------------+-----------------------------------------+
-| Nr    |     Processing Time  | Memory usage diff.   |         Memory usage | Title                                   |
-+-------+----------------------+----------------------+----------------------+-----------------------------------------+
++-----+--------------+--------------+----------+-----------------------------------------------------------------------+
+| Nr  | Proc Time    | Memo diff.   | Peak mem | Title                                                                 |
++-----+--------------+--------------+----------+-----------------------------------------------------------------------+
 
 TEXT;
         foreach ($topTimes as $record) {
-            $numberFormatted = str_pad($record['number'], 5, ' ', STR_PAD_LEFT);
-            $peakMemFormatted = str_pad(round($record['peakmem'] / (1024 * 1024), 2) . 'MB', 20, ' ', STR_PAD_LEFT);
+            $numberFormatted = str_pad($record['number'], 3, ' ', STR_PAD_LEFT);
+
+            $peakMemFormatted = str_pad(round($record['peakmem'] / (1024 * 1024), 2) . 'MB', 8, ' ', STR_PAD_LEFT);
 
             $memusagediffPercentage = round(($record['memusagediff'] / $totalPeakMem) * 100);
 
-            $memDiffFormatted = str_pad(round($record['memusagediff'] / (1024 * 1024), 2) . 'MB (' . $memusagediffPercentage . '%)', 20, ' ', STR_PAD_LEFT);
+            $memDiffFormatted = str_pad(round($record['memusagediff'] / (1024 * 1024), 2) . 'MB (' . $memusagediffPercentage . '%)', 12, ' ', STR_PAD_LEFT);
 
             // @todo make this optional
             // Show memory consuming blocks in different colors
@@ -246,7 +247,7 @@ TEXT;
             }
 
             $percentage = $record['percentage'];
-            $timeFormatted = str_pad($record['milliseconds'] . "ms ({$percentage}%)", 20, ' ', STR_PAD_LEFT);
+            $timeFormatted = str_pad($record['milliseconds'] . "ms ({$percentage}%)", 12, ' ', STR_PAD_LEFT);
 
             // @todo make this optional
             // Show Time consuming blocks in different colors
@@ -255,12 +256,12 @@ TEXT;
                 $timeFormatted = $this->colorString($timeFormatted, $timeColorCode);
             }
 
-            $nameFormatted = str_pad(substr($record['name'], 0, 39), 39, ' ', STR_PAD_RIGHT);
+            $nameFormatted = str_pad(substr($record['name'], 0, 69), 69, ' ', STR_PAD_RIGHT);
             $report .= $row = "| {$numberFormatted} | {$timeFormatted} | {$memDiffFormatted} | {$peakMemFormatted} | {$nameFormatted} |" . PHP_EOL;
         }
 
 $report .= <<<TEXT
-+-------+----------------------+----------------------+----------------------+-----------------------------------------+
++-----+--------------+--------------+----------+-----------------------------------------------------------------------+
 TEXT;
 
         return $report;
