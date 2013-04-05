@@ -210,9 +210,9 @@ class Profiler
 
         // Sort by time
         usort($topTimes, function ($a, $b) {
-            return $a['milliseconds'] < $b['milliseconds'] ? 1 : -1; // sort by processor time desc
+//            return $a['milliseconds'] < $b['milliseconds'] ? 1 : -1; // sort by processor time desc
 //            return $a['peakmem'] < $b['peakmem'] ? 1 : -1; // sort by mem usage desc
-//            return $a['number'] > $b['number'] ? 1 : -1;
+            return $a['number'] > $b['number'] ? 1 : -1;
         });
 
 
