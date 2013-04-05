@@ -225,7 +225,7 @@ class Profiler
         $report = <<<TEXT
 
 
-Profiled '{$this->title}' {$totalTimeFormatted}s total, {$totalPeakMemFormatted}                                     |
+Profiled '{$this->title}' {$totalTimeFormatted}s total, {$totalPeakMemFormatted}
 +----------------------------------------------------------------------------------------------------------------------+
 + REQUEST: {$uri} |
 +-----+--------------+--------------+----------+-----------------------------------------------------------------------+
