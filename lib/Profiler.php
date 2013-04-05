@@ -220,12 +220,11 @@ class Profiler
         $totalPeakMemFormatted = str_pad(round($totalPeakMem / (1024 * 1024), 2) . 'MB', 8, ' ', STR_PAD_LEFT);
         $totalTimeFormatted = round($totalTime, 2);
         $report = <<<TEXT
-# Profiler:
-# Profiler:
-########### Profiler: {$this->title} {$totalTimeFormatted}s total, {$totalPeakMemFormatted} ###########
-Profiler: REQUEST: {$_SERVER['REQUEST_URI']}
-#
-           Number |     Processing Time  | Memory usage diff.   |         Memory usage | Title
+
+
+########### {$this->title} {$totalTimeFormatted}s total, {$totalPeakMemFormatted} ###########
+REQUEST: {$_SERVER['REQUEST_URI']}
+| Nr    |     Processing Time  | Memory usage diff.   |         Memory usage | Title
 TEXT;
         foreach ($topTimes as $record) {
             $numberFormatted = str_pad($record['number'], 5, ' ', STR_PAD_LEFT);
@@ -253,7 +252,7 @@ TEXT;
                 $timeFormatted = $this->colorString($timeFormatted, $timeColorCode);
             }
 
-            $report .= $row = PHP_EOL . " - Profiler:{$numberFormatted} | {$timeFormatted} | {$memDiffFormatted} | {$peakMemFormatted} | \"{$record['name']}\" ";
+            $report .= $row = PHP_EOL . "| {$numberFormatted} | {$timeFormatted} | {$memDiffFormatted} | {$peakMemFormatted} | \"{$record['name']}\" ";
         }
 
         return $report;
