@@ -230,7 +230,7 @@ class Profiler
 
             $memusagediffPercentage = round(($record['memusagediff'] / $totalPeakMem) * 100);
 
-            $memDiffFormatted = str_pad(round($record['memusagediff'] / (1024 * 1024), 2) . 'MB (' . $memusagediffPercentage . ')', 20, ' ', STR_PAD_LEFT);
+            $memDiffFormatted = str_pad(round($record['memusagediff'] / (1024 * 1024), 2) . 'MB (' . $memusagediffPercentage . '%)', 20, ' ', STR_PAD_LEFT);
 
             // @todo make this optional
             // Show memory consuming blocks in different colors
