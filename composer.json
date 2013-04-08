@@ -3,7 +3,7 @@
     "description": "A basic php profiler",
     "autoload": {
         "psr-0": {
-            "Lvl\\Profiler\\": "lib/Profiler"
+            "Lvl\\Profiler\\": "lib"
         }
     }
 }
