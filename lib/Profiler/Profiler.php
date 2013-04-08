@@ -14,6 +14,7 @@ class Profiler
     // @todo make these the same?
     const START_RECORD = 'start';
     const END_RECORD_NAME = '::END::';
+    const RECORD_NAME_BOOTSTRAP = 'Bootstrap / Routing';
 
     private static $bootstrapStartTime;
 
@@ -32,7 +33,7 @@ class Profiler
     {
         $this->records = array();
         if (self::$bootstrapStartTime) {
-            $this->addRecord('Bootstrap / Routing', self::$bootstrapStartTime);
+            $this->addRecord(self::RECORD_NAME_BOOTSTRAP, self::$bootstrapStartTime);
         }
 
         $this->isStarted = false;
