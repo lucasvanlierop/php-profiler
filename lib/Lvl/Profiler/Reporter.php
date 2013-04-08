@@ -39,9 +39,9 @@ class Reporter
 
             if ($record['name'] != Profiler::RECORD_NAME_END) {
                 $topTimes[] = array(
-                    'memusage' => $record['memusage'],
-                    'memusagediff' => $record['memusagediff'],
-                    'peakmem' => $record['peakmem'],
+                    'mem' => $record['mem'],
+                    'memDiff' => $record['memDiff'],
+                    'memPeak' => $record['memPeak'],
                     'number' => $record['number'],
                     'name' => $record['name'],
                     'milliseconds' => round($taskTime * 1000),
@@ -56,7 +56,7 @@ class Reporter
         // Sort by time
         usort($topTimes, function ($a, $b) {
 //            return $a['milliseconds'] < $b['milliseconds'] ? 1 : -1; // sort by processor time desc
-//            return $a['peakmem'] < $b['peakmem'] ? 1 : -1; // sort by mem usage desc
+//            return $a['memPeak'] < $b['memPeak'] ? 1 : -1; // sort by mem usage desc
             return $a['number'] > $b['number'] ? 1 : -1;
         });
 
@@ -83,16 +83,16 @@ TEXT;
         foreach ($topTimes as $record) {
             $numberFormatted = str_pad($record['number'], 3, ' ', STR_PAD_LEFT);
 
-            $peakMemFormatted = str_pad(round($record['peakmem'] / (1024 * 1024), 2) . 'MB', 8, ' ', STR_PAD_LEFT);
+            $peakMemFormatted = str_pad(round($record['memPeak'] / (1024 * 1024), 2) . 'MB', 8, ' ', STR_PAD_LEFT);
 
-            $memusagediffPercentage = round(($record['memusagediff'] / $totalPeakMem) * 100);
+            $memDiffPercentage = round(($record['memDiff'] / $totalPeakMem) * 100);
 
-            $memusagediffPercentageFormatted = str_pad('(' . $memusagediffPercentage . '%)', 5, ' ', STR_PAD_LEFT);
-            $memDiffFormatted = str_pad(round($record['memusagediff'] / (1024 * 1024), 2) . 'MB '. $memusagediffPercentageFormatted, 12, ' ', STR_PAD_LEFT);
+            $memDiffPercentageFormatted = str_pad('(' . $memDiffPercentage . '%)', 5, ' ', STR_PAD_LEFT);
+            $memDiffFormatted = str_pad(round($record['memDiff'] / (1024 * 1024), 2) . 'MB '. $memDiffPercentageFormatted, 12, ' ', STR_PAD_LEFT);
 
             // @todo make this optional
             // Show memory consuming blocks in different colors
-            $memColorCode = $this->mapPercentageToColor($memusagediffPercentage);
+            $memColorCode = $this->mapPercentageToColor($memDiffPercentage);
 
             if ($memColorCode) {
                 $memDiffFormatted = $this->colorString($memDiffFormatted, $memColorCode);

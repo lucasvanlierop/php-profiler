@@ -176,19 +176,19 @@ class Profiler
 
         $currentMemUsage = memory_get_usage();
         if ($recordCount > 0) {
-            $this->records[$recordCount - 1]['peakmem'] = memory_get_peak_usage();
-            $previousMemUsage = $this->records[$recordCount - 1]['memusage'];
-            $this->records[$recordCount - 1]['memusagediff'] = $currentMemUsage - $previousMemUsage;
+            $this->records[$recordCount - 1]['memPeak'] = memory_get_peak_usage();
+            $previousMemUsage = $this->records[$recordCount - 1]['mem'];
+            $this->records[$recordCount - 1]['memDiff'] = $currentMemUsage - $previousMemUsage;
         }
 
 
         $this->records[] = array(
-            'memusagediff' => 0,
-            'peakmem' => 0,
+            'memDiff' => 0,
+            'memPeak' => 0,
             'number' => $recordCount + 1,
             'name' => $name,
             'time' => $time,
-            'memusage' => $currentMemUsage,
+            'mem' => $currentMemUsage,
             'isExternal' => $isExternal
         );
     }
