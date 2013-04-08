@@ -32,7 +32,7 @@ class Reporter
         foreach (array_reverse($records) as $record) {
             $taskTime = $lastEndTime - $record['time'];
 
-            if ($record['name'] != self::END_RECORD_NAME) {
+            if ($record['name'] != Profiler::END_RECORD_NAME) {
                 $topTimes[] = array(
                     'memusage' => $record['memusage'],
                     'memusagediff' => $record['memusagediff'],
