@@ -6,8 +6,7 @@ namespace Lvl\Profiler;
 /**
  * Very basic tool to measure performance
  *
- * @todo make log writer flexible (support both zend log and symfony log)
- * @todo make log level configurable
+ * @todo Support query profiling/loggin
  */
 class Profiler
 {
