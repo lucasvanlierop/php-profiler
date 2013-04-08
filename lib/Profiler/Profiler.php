@@ -6,7 +6,7 @@ namespace Lvl\Profiler;
 /**
  * Very basic tool to measure performance
  *
- * @todo Support query profiling/loggin
+ * @todo Support query profiling/logging
  */
 class Profiler
 {
