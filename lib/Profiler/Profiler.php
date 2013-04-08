@@ -124,6 +124,21 @@ class Profiler
         $this->addRecord($name);
     }
 
+    /**
+     * Use this for profiling blocks that represent time spent on waiting for external system, resource etc.
+     *
+     * @param string $name
+     * @throws Exception
+     */
+    public function startExternalBlock($name)
+    {
+        if (!$this->isStarted()) {
+            $this->start('Auto start');
+        }
+
+        $this->addRecord($name, null, true);
+    }
+
     public function endBlock()
     {
         if (!$this->isStarted()) {
@@ -147,8 +162,12 @@ class Profiler
         return false;
     }
 
-
-    private function addRecord($name, $time = null)
+    /**
+     * @param $name
+     * @param null $time
+     * @param bool $isExternal
+     */
+    private function addRecord($name, $time = null, $isExternal = false)
     {
         if (is_null($time)) {
             $time = microtime(true);
@@ -171,6 +190,7 @@ class Profiler
             'name' => $name,
             'time' => $time,
             'memusage' => $currentMemUsage,
+            'isExternal' => $isExternal
         );
     }
 }

@@ -28,9 +28,14 @@ class Reporter
         $topTimes = array();
         $startTime = $records[0]['time'];
         $totalTime = $endTime - $startTime;
+        $totalExternalTime = 0;
         $lastEndTime = $endTime;
         foreach (array_reverse($records) as $record) {
             $taskTime = $lastEndTime - $record['time'];
+
+            if ($record['isExternal']) {
+                $totalExternalTime += $taskTime;
+            }
 
             if ($record['name'] != Profiler::RECORD_NAME_END) {
                 $topTimes[] = array(
@@ -41,6 +46,7 @@ class Reporter
                     'name' => $record['name'],
                     'milliseconds' => round($taskTime * 1000),
                     'percentage' => round(($taskTime / $totalTime) * 100),
+                    'isExternal' => $record['isExternal']
                 );
             }
 
@@ -59,12 +65,14 @@ class Reporter
         $totalPeakMemFormatted = str_pad(round($totalPeakMem / (1024 * 1024), 2) . 'MB', 8, ' ', STR_PAD_LEFT);
         $totalTimeFormatted = round($totalTime, 2);
 
+        $totalExternalTimeFormatted = round($totalExternalTime, 2);
+
         $uri = str_pad(substr($_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],0, 107), 107, ' ', STR_PAD_RIGHT);
 
         $report = <<<TEXT
 
 
-Profiled '{$this->title}' {$totalTimeFormatted}s total, {$totalPeakMemFormatted}
+Profiled '{$this->title}' {$totalTimeFormatted}s total, {$totalExternalTimeFormatted}s external, {$totalPeakMemFormatted}
 +----------------------------------------------------------------------------------------------------------------------+
 + REQUEST: {$uri} |
 +-----+--------------+--------------+----------+-----------------------------------------------------------------------+
@@ -101,7 +109,11 @@ TEXT;
                 $timeFormatted = $this->colorString($timeFormatted, $timeColorCode);
             }
 
-            $nameFormatted = str_pad(substr($record['name'], 0, 69), 69, ' ', STR_PAD_RIGHT);
+            $name = $record['name'];
+            if ($record['isExternal']) {
+                $name = 'EXT: ' . $name;
+            }
+            $nameFormatted = str_pad(substr($name, 0, 69), 69, ' ', STR_PAD_RIGHT);
             $report .= $row = "| {$numberFormatted} | {$timeFormatted} | {$memDiffFormatted} | {$peakMemFormatted} | {$nameFormatted} |" . PHP_EOL;
         }
 
