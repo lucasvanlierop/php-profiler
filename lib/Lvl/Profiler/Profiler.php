@@ -46,7 +46,7 @@ class Profiler
     public function getRecords()
     {
         // @todo make sure this is only called once
-        $records[count($records) - 1]['memPeak'] = memory_get_peak_usage();
+        $this->records[count($this->records) - 1]['memPeak'] = memory_get_peak_usage();
 
         return $this->records;
     }
