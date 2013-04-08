@@ -106,7 +106,7 @@ class Profiler
             throw new Exception('Profiler has already started');
         }
 
-        $this->addRecord(Profiler::START_RECORD);
+        $this->addRecord(self::START_RECORD);
         $this->isStarted = true;
     }
 
