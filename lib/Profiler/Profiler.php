@@ -49,7 +49,7 @@ class Profiler
     }
 
     /**
-     * @return \Lvl\Profiler
+     * @return \Lvl\Profiler\Profiler
      * @throws Exception
      */
     public static function getInstance()
