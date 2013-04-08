@@ -12,8 +12,8 @@ namespace Lvl\Profiler;
 class Profiler
 {
     // @todo make these the same?
-    const START_RECORD = 'start';
-    const END_RECORD_NAME = '::END::';
+    const RECORD_NAME_START = 'start';
+    const RECORD_NAME_END = '::END::';
     const RECORD_NAME_BOOTSTRAP = 'Bootstrap / Routing';
 
     private static $bootstrapStartTime;
@@ -106,7 +106,7 @@ class Profiler
             throw new Exception('Profiler has already started');
         }
 
-        $this->addRecord(self::START_RECORD);
+        $this->addRecord(self::RECORD_NAME_START);
         $this->isStarted = true;
     }
 
@@ -135,13 +135,13 @@ class Profiler
         }
 
 
-        $this->addRecord(self::END_RECORD_NAME);
+        $this->addRecord(self::RECORD_NAME_END);
     }
 
 
     private function isPreviousEndRecord()
     {
-        if ($this->records[count($this->records) - 1]['name'] === self::END_RECORD_NAME) {
+        if ($this->records[count($this->records) - 1]['name'] === self::RECORD_NAME_END) {
             return true;
         }
         return false;
