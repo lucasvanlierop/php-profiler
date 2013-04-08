@@ -1,4 +1,7 @@
 {
     "name": "lucasvanlierop/php-profiler",
-    "description": "A basic php profiler"
+    "description": "A basic php profiler",
+    "autoload": {
+        "psr-0": { "Lvl\\Profiler\\": "lib\Profiler" }
+    }
 }
