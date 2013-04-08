@@ -30,12 +30,15 @@ class Reporter
         $totalTime = $endTime - $startTime;
         $totalExternalTime = 0;
         $lastEndTime = $endTime;
+        $lastMem = memory_get_usage();
         foreach (array_reverse($records) as $record) {
             $taskTime = $lastEndTime - $record['time'];
 
             if ($record['isExternal']) {
                 $totalExternalTime += $taskTime;
             }
+
+            $record['memDiff'] = $lastMem - $record['mem'];
 
             if ($record['name'] != Profiler::RECORD_NAME_END) {
                 $topTimes[] = array(
@@ -51,6 +54,7 @@ class Reporter
             }
 
             $lastEndTime = $record['time'];
+            $lastMem = $record['mem'];
         }
 
         // Sort by time
@@ -114,6 +118,7 @@ TEXT;
                 $name = 'EXT: ' . $name;
             }
             $nameFormatted = str_pad(substr($name, 0, 69), 69, ' ', STR_PAD_RIGHT);
+            // @todo rename $peakMemFormatted
             $report .= $row = "| {$numberFormatted} | {$timeFormatted} | {$memDiffFormatted} | {$peakMemFormatted} | {$nameFormatted} |" . PHP_EOL;
         }
 
