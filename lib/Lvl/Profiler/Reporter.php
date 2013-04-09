@@ -76,7 +76,7 @@ class Reporter
         $report = <<<TEXT
 
 
-Profiled '{$this->title}' {$totalTimeFormatted}s total, {$totalExternalTimeFormatted}s external, {$totalPeakMemFormatted}
+Profiling finished: {$totalTimeFormatted}s total, {$totalExternalTimeFormatted}s external, {$totalPeakMemFormatted}
 +----------------------------------------------------------------------------------------------------------------------+
 + REQUEST: {$uri} |
 +-----+--------------+--------------+----------+-----------------------------------------------------------------------+

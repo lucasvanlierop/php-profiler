@@ -20,8 +20,6 @@ class Profiler
     /** @var array */
     private $records;
 
-    private $title;
-
     private $isStarted;
 
     private $totalQueryCount = 0;
@@ -100,10 +98,8 @@ class Profiler
         return $this->isStarted;
     }
 
-    public function start($title)
+    public function start()
     {
-        $this->title = $title;
-
         if ($this->isStarted()) {
             throw new Exception('Profiler has already started');
         }
