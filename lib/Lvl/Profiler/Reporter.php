@@ -20,9 +20,10 @@ class Reporter
 
     /**
      * @param array $records
+     * @param array $metadata
      * @return string
      */
-    public function getReport(array $records)
+    public function getReport(array $records, array $metadata)
     {
         $endTime = microtime(true);
         $topTimes = array();
@@ -71,14 +72,17 @@ class Reporter
 
         $totalExternalTimeFormatted = round($totalExternalTime, 2);
 
-        $uri = str_pad(substr($_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],0, 107), 107, ' ', STR_PAD_RIGHT);
+        $metadataFormatted = '';
+        foreach($metadata as $metadataName => $metadataValue) {
+            $metadataFormatted .= "+ {$metadataName}: {$metadataValue}" . PHP_EOL;
+        }
 
         $report = <<<TEXT
 
 
 Profiling finished: {$totalTimeFormatted}s total, {$totalExternalTimeFormatted}s external, {$totalPeakMemFormatted}
 +----------------------------------------------------------------------------------------------------------------------+
-+ REQUEST: {$uri} |
+{$metadataFormatted}
 +-----+--------------+--------------+----------+-----------------------------------------------------------------------+
 | Nr  | Proc Time    | Memo diff.   | Peak mem | Title                                                                 |
 +-----+--------------+--------------+----------+-----------------------------------------------------------------------+

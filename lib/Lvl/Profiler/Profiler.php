@@ -18,6 +18,9 @@ class Profiler
     private static $bootstrapStartTime;
 
     /** @var array */
+    private $metadata;
+
+    /** @var array */
     private $records;
 
     private $isStarted;
@@ -39,17 +42,6 @@ class Profiler
     }
 
     /**
-     * @return array
-     */
-    public function getRecords()
-    {
-        // @todo make sure this is only called once
-        $this->records[count($this->records) - 1]['memPeak'] = memory_get_peak_usage();
-
-        return $this->records;
-    }
-
-    /**
      * @return \Lvl\Profiler\Profiler
      * @throws Exception
      */
@@ -60,6 +52,29 @@ class Profiler
         }
 
         return self::$instance;
+    }
+
+    /**
+     * @param string $key
+     * @param string $value
+     */
+    public function setMetadataValue($key, $value)
+    {
+        $this->metadata[$key] = $value;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        // @todo make sure this is only called once
+        $this->records[count($this->records) - 1]['memPeak'] = memory_get_peak_usage();
+
+        return array(
+            'metadata' => $this->metadata,
+            'records' => $this->records
+        );
     }
 
     public static function markBootstrapStart()
