@@ -173,6 +173,7 @@ class Profiler
 
         $recordCount = count($this->records);
 
+        // Set peak memory usage for previous block
         if ($recordCount > 0) {
             $this->records[$recordCount - 1]['memPeak'] = memory_get_peak_usage();
         }
