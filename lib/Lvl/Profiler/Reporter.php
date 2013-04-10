@@ -156,10 +156,16 @@ TEXT;
     }
 
 
-    public function logReport(array $records)
+    /**
+     * Writes report to log
+     *
+     * @param array $records
+     * @param array $metadata
+     */
+    public function logReport(array $records, array $metadata)
     {
         $logCallback = $this->logCallback;
-        foreach (explode(PHP_EOL, $this->getReport($records)) as $line) {
+        foreach (explode(PHP_EOL, $this->getReport($records, $metadata)) as $line) {
             $logCallback($line);
         }
     }
