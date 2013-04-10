@@ -1,6 +1,9 @@
 <?php
 namespace Lvl\Profiler;
 
+/**
+ * @todo Move Logging functions to a separate class
+ */
 class Reporter
 {
     const FOREGROUND_COLOR_CODE_YELLOW = '1;33';
