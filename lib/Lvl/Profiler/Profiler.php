@@ -1,6 +1,8 @@
 <?php
 namespace Lvl\Profiler;
 
+use Exception;
+
 //use Doctrine\DBAL\Logging\SQLLogger;
 
 /**
