@@ -107,7 +107,7 @@ TEXT;
             $memDiffPercentage = round(($record['memDiff'] / $totalPeakMem) * 100);
 
             $memDiffPercentageFormatted = '(' . $memDiffPercentage . 'p)';
-            $memDiffFormatted = round($record['memDiff'] / (1024 * 1024), 2) . 'MB '. $memDiffPercentageFormatted;
+            $memDiffFormatted = round($record['memDiff'] / (1024 * 1024), 2) . 'MB ';
 
             // @todo make this optional
             // Show memory consuming blocks in different colors
@@ -119,8 +119,8 @@ TEXT;
 
             $timeDiffPercentage = $record['timeDiffPercentage'];
             // @todo make table printer handle '%' char, this causes sprintf errors
-            $timeDiffPercentageFormatted = '(' . $timeDiffPercentage . 'p)';
-            $timeFormatted = $record['timeDiffMs'] . "ms " . $timeDiffPercentageFormatted;
+            $timeDiffPercentageFormatted = $timeDiffPercentage . 'p';
+            $timeFormatted = $record['timeDiffMs'] . "ms";
 
             // @todo make this optional
             // Show Time consuming blocks in different colors
@@ -138,7 +138,9 @@ TEXT;
             $tableData[] = array(
                 'Nr' => $numberFormatted,
                 'Proc Time' => $timeFormatted,
+                'Proc Time Percentage' => $timeDiffPercentageFormatted,
                 'Memo diff.' => $memDiffFormatted,
+                'Memo diff. percentage' => $memDiffFormatted,
                 'Peak mem' => $memPeakFormatted,
                 'Title' => $nameFormatted
             );
