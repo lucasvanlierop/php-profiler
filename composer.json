@@ -5,5 +5,8 @@
         "psr-0": {
             "Lvl\\Profiler\\": "lib"
         }
+    },
+    "require":{
+        "jlogsdon/cli" : "*"
     }
 }
