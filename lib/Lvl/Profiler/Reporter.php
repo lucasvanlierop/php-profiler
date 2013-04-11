@@ -28,25 +28,23 @@ class Reporter
      */
     public function getReport(array $records, array $metadata)
     {
-        $endTime = microtime(true);
         $topTimes = array();
-        $startTime = $records[0]['time'];
-        $totalTime = $endTime - $startTime;
+        $startTime = $records[0]['startTime'];
+        $endRecord = end($records);
+        $totalTime = $endRecord['endTime'] - $startTime;
         $totalExternalTime = 0;
-        $lastEndTime = $endTime;
-        $lastMem = memory_get_usage();
-        foreach (array_reverse($records) as $record) {
-            $taskTime = $lastEndTime - $record['time'];
+        foreach ($records as $record) {
+            $taskTime = $record['endTime'] - $record['startTime'];
 
             if ($record['isExternal']) {
                 $totalExternalTime += $taskTime;
             }
 
-            $record['memDiff'] = $lastMem - $record['mem'];
+            $record['memDiff'] = $record['endMem'] - $record['startMem'];
 
             if ($record['name'] != Profiler::RECORD_NAME_END) {
                 $topTimes[] = array(
-                    'mem' => $record['mem'],
+                    'mem' => $record['startMem'],
                     'memDiff' => $record['memDiff'],
                     'memPeak' => $record['memPeak'],
                     'number' => $record['number'],
@@ -56,9 +54,6 @@ class Reporter
                     'isExternal' => $record['isExternal']
                 );
             }
-
-            $lastEndTime = $record['time'];
-            $lastMem = $record['mem'];
         }
 
         // Sort by time
@@ -69,7 +64,7 @@ class Reporter
         });
 
 
-        $totalPeakMem = memory_get_peak_usage();
+        $totalPeakMem = $endRecord['memPeak'];
         $totalPeakMemFormatted = str_pad(round($totalPeakMem / (1024 * 1024), 2) . 'MB', 8, ' ', STR_PAD_LEFT);
         $totalTimeFormatted = round($totalTime, 2);
 

@@ -17,10 +17,25 @@ class Profiler
     const RECORD_NAME_END = '::END::';
     const RECORD_NAME_BOOTSTRAP = 'Bootstrap / Routing';
 
-    private static $bootstrapStartTime;
+    /**
+     * @var array
+     */
+    private static $bootstrapRecord;
 
     /** @var array */
     private $metadata;
+
+    private $startTime;
+
+    private $endTime;
+
+    private $startMem;
+
+    private $endMem;
+
+    private $startMemPeak;
+
+    private $endMemPeak;
 
     /** @var array */
     private $records;
@@ -34,9 +49,15 @@ class Profiler
     public function __construct()
     {
         $this->records = array();
-        if (self::$bootstrapStartTime) {
-            $this->addRecord(self::RECORD_NAME_BOOTSTRAP, self::$bootstrapStartTime);
+
+        if (self::$bootstrapRecord) {
+            // Create a  bootstrap start record using information set earlier
+            $this->addRecord(self::RECORD_NAME_BOOTSTRAP);
+            $currentRecord = &$this->getCurrentRecord();
+            $currentRecord = array_merge($currentRecord, self::$bootstrapRecord);
         }
+
+        $this->startTime = microtime(true);
 
         $this->isStarted = false;
 
@@ -57,6 +78,20 @@ class Profiler
     }
 
     /**
+     * Returns a reference to the current profile record if any exists
+     *
+     * @return null|array
+     */
+    private function &getCurrentRecord() {
+        $currentyIndex = count($this->records) - 1;
+
+        if (isset($this->records[$currentyIndex])) {
+            $currentRecord = &$this->records[$currentyIndex];
+            return $currentRecord;
+        }
+    }
+
+    /**
      * @param string $key
      * @param string $value
      */
@@ -70,8 +105,9 @@ class Profiler
      */
     public function toArray()
     {
-        // @todo make sure this is only called once
-        $this->records[count($this->records) - 1]['memPeak'] = memory_get_peak_usage();
+        // @todo check if record hasn't already been ended long before end of execution
+        $this->startBlock('end');
+        $this->endCurrentRecord();
 
         return array(
             'metadata' => $this->metadata,
@@ -79,9 +115,13 @@ class Profiler
         );
     }
 
+    /**
+     * Register time and memory usage at time of bootstrapping
+     */
     public static function markBootstrapStart()
     {
-        self::$bootstrapStartTime = microtime(true);
+        self::$bootstrapRecord['startTime'] = microtime(true);
+        self::$bootstrapRecord['startMem'] = memory_get_usage();
     }
 
     /**
@@ -151,7 +191,7 @@ class Profiler
             $this->start('Auto start');
         }
 
-        $this->addRecord($name, null, true);
+        $this->addRecord($name, true);
     }
 
     public function endBlock()
@@ -164,8 +204,7 @@ class Profiler
             throw new Exception('Profiler: block cannot be ended: no block was started');
         }
 
-
-        $this->addRecord(self::RECORD_NAME_END);
+        $this->endCurrentRecord();
     }
 
 
@@ -179,29 +218,43 @@ class Profiler
 
     /**
      * @param $name
-     * @param null $time
      * @param bool $isExternal
      */
-    private function addRecord($name, $time = null, $isExternal = false)
+    private function addRecord($name, $isExternal = false)
     {
-        if (is_null($time)) {
-            $time = microtime(true);
-        }
-
-        $recordCount = count($this->records);
-
-        // Set peak memory usage for previous block
-        if ($recordCount > 0) {
-            $this->records[$recordCount - 1]['memPeak'] = memory_get_peak_usage();
-        }
+        $this->endCurrentRecord();
 
         $this->records[] = array(
             'memPeak' => 0,
-            'number' => $recordCount + 1,
+            'number' => count($this->records),
             'name' => $name,
-            'time' => $time,
-            'mem' => memory_get_usage(),
-            'isExternal' => $isExternal
+            'startTime' => microtime(true),
+            'endTime' => 0,
+            'startMem' => memory_get_usage(),
+            'endMem' => 0,
+            'isExternal' => $isExternal,
+            'isEnded' => false
         );
+    }
+
+    /**
+     */
+    private function endCurrentRecord()
+    {
+        $currentRecord = &$this->getCurrentRecord();
+
+        if (!is_array($currentRecord)) {
+            return;
+        }
+
+        if ($currentRecord['isEnded']) {
+            return;
+        }
+
+        // Set peak memory usage for previous block
+        $currentRecord['endTime'] = microtime(true);
+        $currentRecord['endMem'] = memory_get_usage();
+        $currentRecord['memPeak'] = memory_get_peak_usage();
+        $currentRecord['isEnded']  = true;
     }
 }
