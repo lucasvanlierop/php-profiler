@@ -29,13 +29,13 @@ class Reporter
     public function getReport(array $records, array $metadata)
     {
         $topTimes = array();
-        $startTime = $records[0]['startTime'];
+        $timeStart = $records[0]['timeStart'];
         $endRecord = end($records);
-        $totalTime = $endRecord['endTime'] - $startTime;
+        $totalTime = $endRecord['timeEnd'] - $timeStart;
         $totalExternalTime = 0;
         $peakMem = 0;
         foreach ($records as $record) {
-            $taskTime = $record['endTime'] - $record['startTime'];
+            $taskTime = $record['timeEnd'] - $record['timeStart'];
 
             if ($record['isExternal']) {
                 $totalExternalTime += $taskTime;
@@ -43,11 +43,11 @@ class Reporter
 
             // Use peak memory instead of end memory if peak memory usage has increased during execution
             if ($record['memPeak'] > $peakMem) {
-                $endMem = $record = $record['memPeak'];
+                $memEnd = $record['memPeak'];
             } else {
-                $endMem = $record['endMem'];
+                $memEnd = $record['memEnd'];
             }
-            $record['memDiff'] = $endMem - $record['startMem'];
+            $record['memDiff'] = $memEnd - $record['memStart'];
 
             if ($record['name'] != Profiler::RECORD_NAME_END) {
                 $topTimes[] = array(

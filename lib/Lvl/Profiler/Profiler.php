@@ -106,8 +106,8 @@ class Profiler
      */
     public static function markBootstrapStart()
     {
-        self::$bootstrapRecord['startTime'] = microtime(true);
-        self::$bootstrapRecord['startMem'] = memory_get_usage();
+        self::$bootstrapRecord['timeStart'] = microtime(true);
+        self::$bootstrapRecord['memStart'] = memory_get_usage();
     }
 
     /**
@@ -214,10 +214,10 @@ class Profiler
             'memPeak' => 0,
             'number' => count($this->records),
             'name' => $name,
-            'startTime' => microtime(true),
-            'endTime' => 0,
-            'startMem' => memory_get_usage(),
-            'endMem' => 0,
+            'timeStart' => microtime(true),
+            'timeEnd' => 0,
+            'memStart' => memory_get_usage(),
+            'memEnd' => 0,
             'isExternal' => $isExternal,
             'isEnded' => false
         );
@@ -238,8 +238,8 @@ class Profiler
         }
 
         // Set peak memory usage for previous block
-        $currentRecord['endTime'] = microtime(true);
-        $currentRecord['endMem'] = memory_get_usage();
+        $currentRecord['timeEnd'] = microtime(true);
+        $currentRecord['memEnd'] = memory_get_usage();
         $currentRecord['memPeak'] = memory_get_peak_usage();
         $currentRecord['isEnded']  = true;
     }
