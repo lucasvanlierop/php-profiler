@@ -55,8 +55,8 @@ class Reporter
                     'memPeak' => $record['memPeak'],
                     'number' => $record['number'],
                     'name' => $record['name'],
-                    'milliseconds' => round($taskTime * 1000),
-                    'percentage' => round(($taskTime / $totalTime) * 100),
+                    'timeDiffMs' => round($taskTime * 1000),
+                    'timeDiffPercentage' => round(($taskTime / $totalTime) * 100),
                     'isExternal' => $record['isExternal']
                 );
             }
@@ -66,7 +66,7 @@ class Reporter
 
         // Sort by time
         usort($topTimes, function ($a, $b) {
-//            return $a['milliseconds'] < $b['milliseconds'] ? 1 : -1; // sort by processor time desc
+//            return $a['timeDiffMs'] < $b['timeDiffMs'] ? 1 : -1; // sort by processor time desc
 //            return $a['memPeak'] < $b['memPeak'] ? 1 : -1; // sort by mem usage desc
             return $a['number'] > $b['number'] ? 1 : -1;
         });
@@ -112,13 +112,13 @@ TEXT;
                 $memDiffFormatted = $this->colorString($memDiffFormatted, $memColorCode);
             }
 
-            $percentage = $record['percentage'];
-            $percentageFormatted = str_pad('(' . $percentage . '%)', 5, ' ', STR_PAD_LEFT);
-            $timeFormatted = str_pad($record['milliseconds'] . "ms " . $percentageFormatted, 12, ' ', STR_PAD_LEFT);
+            $timeDiffPercentage = $record['timeDiffPercentage'];
+            $timeDiffPercentageFormatted = str_pad('(' . $timeDiffPercentage . '%)', 5, ' ', STR_PAD_LEFT);
+            $timeFormatted = str_pad($record['timeDiffMs'] . "ms " . $timeDiffPercentageFormatted, 12, ' ', STR_PAD_LEFT);
 
             // @todo make this optional
             // Show Time consuming blocks in different colors
-            $timeColorCode = $this->mapPercentageToColor($percentage);
+            $timeColorCode = $this->mapPercentageToColor($timeDiffPercentage);
             if ($timeColorCode) {
                 $timeFormatted = $this->colorString($timeFormatted, $timeColorCode);
             }
