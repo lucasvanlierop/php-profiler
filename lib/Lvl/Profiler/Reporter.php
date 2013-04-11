@@ -33,6 +33,7 @@ class Reporter
         $endRecord = end($records);
         $totalTime = $endRecord['endTime'] - $startTime;
         $totalExternalTime = 0;
+        $peakMem = 0;
         foreach ($records as $record) {
             $taskTime = $record['endTime'] - $record['startTime'];
 
@@ -40,7 +41,13 @@ class Reporter
                 $totalExternalTime += $taskTime;
             }
 
-            $record['memDiff'] = $record['endMem'] - $record['startMem'];
+            // Use peak memory instead of end memory if peak memory usage has increased during execution
+            if ($record['memPeak'] > $peakMem) {
+                $endMem = $record = $record['memPeak'];
+            } else {
+                $endMem = $record['endMem'];
+            }
+            $record['memDiff'] = $endMem - $record['startMem'];
 
             if ($record['name'] != Profiler::RECORD_NAME_END) {
                 $topTimes[] = array(
@@ -54,6 +61,8 @@ class Reporter
                     'isExternal' => $record['isExternal']
                 );
             }
+
+            $peakMem = $record['peakMem'];
         }
 
         // Sort by time
