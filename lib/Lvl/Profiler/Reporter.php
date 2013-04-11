@@ -1,6 +1,10 @@
 <?php
 namespace Lvl\Profiler;
 
+$vendorDir = realpath(__DIR__ . '/../../../../../');
+require $vendorDir .'/jlogsdon/cli/lib/cli/cli.php';
+\cli\register_autoload();
+
 /**
  * @todo Move Logging functions to a separate class
  */
@@ -26,7 +30,7 @@ class Reporter
      * @param array $metadata
      * @return string
      */
-    public function getReport(array $records, array $metadata)
+    public function printReport(array $records, array $metadata)
     {
         $topTimes = array();
         $timeStart = $records[0]['timeStart'];
@@ -73,7 +77,7 @@ class Reporter
 
 
         $totalPeakMem = $endRecord['memPeak'];
-        $totalPeakMemFormatted = str_pad(round($totalPeakMem / (1024 * 1024), 2) . 'MB', 8, ' ', STR_PAD_LEFT);
+        $totalPeakMemFormatted = round($totalPeakMem / (1024 * 1024), 2) . 'MB';
         $totalTimeFormatted = round($totalTime, 2);
 
         $totalExternalTimeFormatted = round($totalExternalTime, 2);
@@ -87,22 +91,23 @@ class Reporter
 
 
 Profiling finished: {$totalTimeFormatted}s total, {$totalExternalTimeFormatted}s external, {$totalPeakMemFormatted}
-+----------------------------------------------------------------------------------------------------------------------+
 {$metadataFormatted}
-+-----+--------------+--------------+----------+-----------------------------------------------------------------------+
-| Nr  | Proc Time    | Memo diff.   | Peak mem | Title                                                                 |
-+-----+--------------+--------------+----------+-----------------------------------------------------------------------+
 
 TEXT;
-        foreach ($topTimes as $record) {
-            $numberFormatted = str_pad($record['number'], 3, ' ', STR_PAD_LEFT);
 
-            $memPeakFormatted = str_pad(round($record['memPeak'] / (1024 * 1024), 2) . 'MB', 8, ' ', STR_PAD_LEFT);
+        echo $report;
+
+        $tableData = array();
+
+        foreach ($topTimes as $record) {
+            $numberFormatted = $record['number'];
+
+            $memPeakFormatted = round($record['memPeak'] / (1024 * 1024), 2) . 'MB';
 
             $memDiffPercentage = round(($record['memDiff'] / $totalPeakMem) * 100);
 
-            $memDiffPercentageFormatted = str_pad('(' . $memDiffPercentage . '%)', 5, ' ', STR_PAD_LEFT);
-            $memDiffFormatted = str_pad(round($record['memDiff'] / (1024 * 1024), 2) . 'MB '. $memDiffPercentageFormatted, 12, ' ', STR_PAD_LEFT);
+            $memDiffPercentageFormatted = '(' . $memDiffPercentage . 'p)';
+            $memDiffFormatted = round($record['memDiff'] / (1024 * 1024), 2) . 'MB '. $memDiffPercentageFormatted;
 
             // @todo make this optional
             // Show memory consuming blocks in different colors
@@ -113,8 +118,9 @@ TEXT;
             }
 
             $timeDiffPercentage = $record['timeDiffPercentage'];
-            $timeDiffPercentageFormatted = str_pad('(' . $timeDiffPercentage . '%)', 5, ' ', STR_PAD_LEFT);
-            $timeFormatted = str_pad($record['timeDiffMs'] . "ms " . $timeDiffPercentageFormatted, 12, ' ', STR_PAD_LEFT);
+            // @todo make table printer handle '%' char, this causes sprintf errors
+            $timeDiffPercentageFormatted = '(' . $timeDiffPercentage . 'p)';
+            $timeFormatted = $record['timeDiffMs'] . "ms " . $timeDiffPercentageFormatted;
 
             // @todo make this optional
             // Show Time consuming blocks in different colors
@@ -127,15 +133,25 @@ TEXT;
             if ($record['isExternal']) {
                 $name = 'EXT: ' . $name;
             }
-            $nameFormatted = str_pad(substr($name, 0, 69), 69, ' ', STR_PAD_RIGHT);
-            $report .= $row = "| {$numberFormatted} | {$timeFormatted} | {$memDiffFormatted} | {$memPeakFormatted} | {$nameFormatted} |" . PHP_EOL;
+            $nameFormatted = substr($name, 0, 69);
+
+            $tableData[] = array(
+                'Nr' => $numberFormatted,
+                'Proc Time' => $timeFormatted,
+                'Memo diff.' => $memDiffFormatted,
+                'Peak mem' => $memPeakFormatted,
+                'Title' => $nameFormatted
+            );
         }
 
-        $report .= <<<TEXT
-+-----+--------------+--------------+----------+-----------------------------------------------------------------------+
-TEXT;
+        $headers = array_keys($tableData[0]);
 
-        return $report;
+        $table = new \cli\Table();
+        $table->setHeaders($headers);
+        $table->setRows($tableData);
+
+        // @todo find out how to return this
+        $table->display();
     }
 
     /**
