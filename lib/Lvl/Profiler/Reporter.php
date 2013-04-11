@@ -136,18 +136,25 @@ TEXT;
             $nameFormatted = substr($name, 0, 69);
 
             $tableData[] = array(
-                'Nr' => $numberFormatted,
-                'Proc Time' => $timeFormatted,
-                'Proc Time Percentage' => $timeDiffPercentageFormatted,
-                'Memo diff.' => $memDiffFormatted,
-                'Memo diff. percentage' => $memDiffFormatted,
-                'Peak mem' => $memPeakFormatted,
-                'Title' => $nameFormatted
+                $numberFormatted,
+                $timeFormatted,
+                $timeDiffPercentageFormatted,
+                $memDiffFormatted,
+                $memDiffFormatted,
+                $memPeakFormatted,
+                $nameFormatted
             );
         }
 
-        $headers = array_keys($tableData[0]);
-
+        $headers = array(
+            'Nr',
+            'Proc Time',
+            'Proc Time Percentage',
+            'Memo diff.',
+            'Memo diff. percentage',
+            'Peak mem',
+            'Title'
+        );
         $table = new \cli\Table();
         $table->setHeaders($headers);
         $table->setRows($tableData);
