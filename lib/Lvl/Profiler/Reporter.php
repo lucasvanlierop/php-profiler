@@ -51,7 +51,6 @@ class Reporter
 
             if ($record['name'] != Profiler::RECORD_NAME_END) {
                 $topTimes[] = array(
-                    'mem' => $record['startMem'],
                     'memDiff' => $record['memDiff'],
                     'memPeak' => $record['memPeak'],
                     'number' => $record['number'],
