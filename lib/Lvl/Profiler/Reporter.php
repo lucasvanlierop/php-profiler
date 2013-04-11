@@ -33,7 +33,7 @@ class Reporter
         $endRecord = end($records);
         $totalTime = $endRecord['timeEnd'] - $timeStart;
         $totalExternalTime = 0;
-        $peakMem = 0;
+        $memPeak = 0;
         foreach ($records as $record) {
             $taskTime = $record['timeEnd'] - $record['timeStart'];
 
@@ -42,7 +42,7 @@ class Reporter
             }
 
             // Use peak memory instead of end memory if peak memory usage has increased during execution
-            if ($record['memPeak'] > $peakMem) {
+            if ($record['memPeak'] > $memPeak) {
                 $memEnd = $record['memPeak'];
             } else {
                 $memEnd = $record['memEnd'];
@@ -61,7 +61,7 @@ class Reporter
                 );
             }
 
-            $peakMem = $record['peakMem'];
+            $memPeak = $record['memPeak'];
         }
 
         // Sort by time
@@ -97,7 +97,7 @@ TEXT;
         foreach ($topTimes as $record) {
             $numberFormatted = str_pad($record['number'], 3, ' ', STR_PAD_LEFT);
 
-            $peakMemFormatted = str_pad(round($record['memPeak'] / (1024 * 1024), 2) . 'MB', 8, ' ', STR_PAD_LEFT);
+            $memPeakFormatted = str_pad(round($record['memPeak'] / (1024 * 1024), 2) . 'MB', 8, ' ', STR_PAD_LEFT);
 
             $memDiffPercentage = round(($record['memDiff'] / $totalPeakMem) * 100);
 
@@ -128,8 +128,7 @@ TEXT;
                 $name = 'EXT: ' . $name;
             }
             $nameFormatted = str_pad(substr($name, 0, 69), 69, ' ', STR_PAD_RIGHT);
-            // @todo rename $peakMemFormatted
-            $report .= $row = "| {$numberFormatted} | {$timeFormatted} | {$memDiffFormatted} | {$peakMemFormatted} | {$nameFormatted} |" . PHP_EOL;
+            $report .= $row = "| {$numberFormatted} | {$timeFormatted} | {$memDiffFormatted} | {$memPeakFormatted} | {$nameFormatted} |" . PHP_EOL;
         }
 
         $report .= <<<TEXT
