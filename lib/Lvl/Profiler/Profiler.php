@@ -25,18 +25,6 @@ class Profiler
     /** @var array */
     private $metadata;
 
-    private $startTime;
-
-    private $endTime;
-
-    private $startMem;
-
-    private $endMem;
-
-    private $startMemPeak;
-
-    private $endMemPeak;
-
     /** @var array */
     private $records;
 
@@ -56,8 +44,6 @@ class Profiler
             $currentRecord = &$this->getCurrentRecord();
             $currentRecord = array_merge($currentRecord, self::$bootstrapRecord);
         }
-
-        $this->startTime = microtime(true);
 
         $this->isStarted = false;
 
