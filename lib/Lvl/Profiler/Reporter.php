@@ -10,9 +10,10 @@ require $vendorDir .'/jlogsdon/cli/lib/cli/cli.php';
  */
 class Reporter
 {
-    const FOREGROUND_COLOR_CODE_YELLOW = '1;33';
-    const FOREGROUND_COLOR_CODE_RED = '0;31';
-    const FOREGROUND_COLOR_CODE_BROWN = '0;33';
+    const FOREGROUND_COLOR_CODE_YELLOW = '%Y';
+    const FOREGROUND_COLOR_CODE_RED = '%r';
+    const FOREGROUND_COLOR_CODE_BROWN = '%y';
+    const COLOR_END = '%n';
 
     /** @var callable */
     private $logCallback;
@@ -180,11 +181,17 @@ TEXT;
         return null;
     }
 
+    /**
+     * Adds tokens that will be replaced by \cli\Colors::colorize()
+     *
+     * @param string $string
+     * @param string $colorCode
+     * @return string
+     */
     private function colorString($string, $colorCode)
     {
-        return "\033[" . $colorCode . "m" . $string . "\033[0m";
+        return $colorCode . $string . self::COLOR_END;
     }
-
 
     /**
      * Writes report to log
