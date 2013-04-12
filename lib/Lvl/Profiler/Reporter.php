@@ -107,7 +107,7 @@ TEXT;
 
             $memDiffPercentage = round(($record['memDiff'] / $totalPeakMem) * 100);
 
-            $memDiffPercentageFormatted = '(' . $memDiffPercentage . '%)';
+            $memDiffPercentageFormatted = $memDiffPercentage . '%';
             $memDiffFormatted = round($record['memDiff'] / (1024 * 1024), 2) . 'MB ';
 
             // @todo make this optional
