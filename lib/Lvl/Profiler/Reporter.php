@@ -2,7 +2,7 @@
 namespace Lvl\Profiler;
 
 $vendorDir = realpath(__DIR__ . '/../../../../../');
-require $vendorDir .'/jlogsdon/cli/lib/cli/cli.php';
+require $vendorDir .'/lucasvanlierop/php-cli-tools/lib/cli/cli.php';
 \cli\register_autoload();
 
 /**

@@ -6,7 +6,13 @@
             "Lvl\\Profiler\\": "lib"
         }
     },
-    "require":{
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/lucasvanlierop/php-cli-tools.git"
+        }
+    ],
+    "require": {
         "jlogsdon/cli" : "*"
     }
 }
