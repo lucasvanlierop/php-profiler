@@ -141,7 +141,7 @@ TEXT;
                 $timeFormatted,
                 $timeDiffPercentageFormatted,
                 $memDiffFormatted,
-                $memDiffFormatted,
+                $memDiffPercentageFormatted,
                 $memPeakFormatted,
                 $nameFormatted
             );
