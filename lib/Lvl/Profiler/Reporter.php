@@ -107,7 +107,7 @@ TEXT;
 
             $memDiffPercentage = round(($record['memDiff'] / $totalPeakMem) * 100);
 
-            $memDiffPercentageFormatted = '(' . $memDiffPercentage . 'p)';
+            $memDiffPercentageFormatted = '(' . $memDiffPercentage . '%)';
             $memDiffFormatted = round($record['memDiff'] / (1024 * 1024), 2) . 'MB ';
 
             // @todo make this optional
@@ -119,8 +119,7 @@ TEXT;
             }
 
             $timeDiffPercentage = $record['timeDiffPercentage'];
-            // @todo make table printer handle '%' char, this causes sprintf errors
-            $timeDiffPercentageFormatted = $timeDiffPercentage . 'p';
+            $timeDiffPercentageFormatted = $timeDiffPercentage . '%';
             $timeFormatted = $record['timeDiffMs'] . "ms";
 
             // @todo make this optional
