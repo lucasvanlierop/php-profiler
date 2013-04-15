@@ -6,7 +6,6 @@
             "Lvl\\Profiler\\": "lib"
         }
     },    
-    {
     "repositories": [
         {
             "type": "vcs",
