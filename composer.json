@@ -10,10 +10,10 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "ttps://github.com/lucasvanlierop/php-cli-tools"
+            "url": "https://github.com/lucasvanlierop/php-cli-tools"
         }
     ],
     "require": {
-        "jlogsdon/php-cli-tools": "dev-master"
+        "jlogsdon/cli": "dev-master"
     }
 }
