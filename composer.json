@@ -9,7 +9,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@github.com:lucasvanlierop/php-cli-tools"
+            "url": "git@github.com:lucasvanlierop/php-cli-tools.git"
         }
     ],
     "require": {
