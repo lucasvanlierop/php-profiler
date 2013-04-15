@@ -13,6 +13,6 @@
         }
     ],
     "require": {
-        "jlogsdon/cli": "dev-master"
+        "lucasvanlierop/php-cli-tools": "dev-master"
     }
 }
