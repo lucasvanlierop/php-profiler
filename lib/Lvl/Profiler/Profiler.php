@@ -71,10 +71,14 @@ class Profiler
     private function &getCurrentRecord() {
         $currentyIndex = count($this->records) - 1;
 
+        $currentRecord = null;
+
         if (isset($this->records[$currentyIndex])) {
             $currentRecord = &$this->records[$currentyIndex];
-            return $currentRecord;
+
         }
+
+        return $currentRecord;
     }
 
     /**
