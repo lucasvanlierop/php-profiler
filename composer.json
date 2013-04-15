@@ -13,6 +13,6 @@
         }
     ],
     "require": {
-        "jlogsdon/cli" : ""
+        "jlogsdon/cli" : "*"
     }
 }
