@@ -7,6 +7,6 @@
         }
     },    
     "require": {
-        "jlogsdon/cli": "*"
+        "jlogsdon/cli": "dev-master"
     }
 }
