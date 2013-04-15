@@ -5,14 +5,15 @@
         "psr-0": {
             "Lvl\\Profiler\\": "lib"
         }
-    },
+    },    
+    {
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/lucasvanlierop/php-cli-tools"
+            "url": "ttps://github.com/lucasvanlierop/php-cli-tools"
         }
     ],
     "require": {
-        "lucasvanlierop/php-cli-tools": "dev-master"
+        "jlogsdon/php-cli-tools": "dev-master"
     }
 }
