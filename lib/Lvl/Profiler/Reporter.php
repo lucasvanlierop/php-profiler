@@ -37,11 +37,13 @@ class Reporter
         $timeStart = $records[0]['timeStart'];
         $endRecord = end($records);
         $totalTime = $endRecord['timeEnd'] - $timeStart;
+        $totalTimeCurrent = 0;
         $totalExternalTime = 0;
         $memPeak = 0;
         foreach ($records as $record) {
             $taskTime = $record['timeEnd'] - $record['timeStart'];
 
+            $totalTimeCurrent += $taskTime;
             if ($record['isExternal']) {
                 $totalExternalTime += $taskTime;
             }
@@ -62,6 +64,7 @@ class Reporter
                     'name' => $record['name'],
                     'timeDiffMs' => round($taskTime * 1000),
                     'timeDiffPercentage' => round(($taskTime / $totalTime) * 100),
+                    'timeTotalMs' => $totalTimeCurrent,
                     'isExternal' => $record['isExternal']
                 );
             }
@@ -121,6 +124,7 @@ TEXT;
             $timeDiffPercentage = $record['timeDiffPercentage'];
             $timeDiffPercentageFormatted = $timeDiffPercentage . '%';
             $timeFormatted = $record['timeDiffMs'] . "ms";
+            $timeTotalFormatted = (round($record['timeTotalMs'],2) * 1000) . 'ms';
 
             // @todo make this optional
             // Show Time consuming blocks in different colors
@@ -139,6 +143,7 @@ TEXT;
                 $numberFormatted,
                 $timeFormatted,
                 $timeDiffPercentageFormatted,
+                $timeTotalFormatted,
                 $memDiffFormatted,
                 $memDiffPercentageFormatted,
                 $memPeakFormatted,
@@ -150,6 +155,7 @@ TEXT;
             'Nr',
             'Proc Time',
             'Proc Time Percentage',
+            'Proc Time Total',
             'Memo diff.',
             'Memo diff. percentage',
             'Peak mem',
