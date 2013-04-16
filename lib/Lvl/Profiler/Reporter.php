@@ -117,8 +117,12 @@ TEXT;
             // Show memory consuming blocks in different colors
             $memColorCode = $this->mapPercentageToColor($memDiffPercentage);
 
+            $nameColorCode = null;
             if ($memColorCode) {
                 $memDiffFormatted = $this->colorString($memDiffFormatted, $memColorCode);
+                $memDiffPercentageFormatted = $this->colorString($memDiffPercentageFormatted, $memColorCode);
+                $memPeakFormatted = $this->colorString($memPeakFormatted, $memColorCode);
+                $nameColorCode = $memColorCode;
             }
 
             $timeDiffPercentage = $record['timeDiffPercentage'];
@@ -131,6 +135,12 @@ TEXT;
             $timeColorCode = $this->mapPercentageToColor($timeDiffPercentage);
             if ($timeColorCode) {
                 $timeFormatted = $this->colorString($timeFormatted, $timeColorCode);
+                $timeDiffPercentageFormatted = $this->colorString($timeDiffPercentageFormatted, $timeColorCode);
+                $timeTotalFormatted = $this->colorString($timeTotalFormatted, $timeColorCode);
+
+                if ($timeDiffPercentage > $memDiffPercentage) {
+                    $nameColorCode = $timeColorCode;
+                }
             }
 
             $name = $record['name'];
@@ -138,6 +148,11 @@ TEXT;
                 $name = 'EXT: ' . $name;
             }
             $nameFormatted = substr($name, 0, 69);
+
+            // Colorize name with color of time or memory
+            if ($nameColorCode) {
+                $nameFormatted = $this->colorString($nameFormatted, $nameColorCode);
+            }
 
             $tableData[] = array(
                 $numberFormatted,
