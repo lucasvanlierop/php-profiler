@@ -32,6 +32,8 @@ class Profiler
 
     private $totalQueryCount = 0;
 
+    private $includedFilesCount = 0;
+
     private static $instance;
 
     public function __construct()
@@ -112,6 +114,7 @@ class Profiler
     {
         self::$bootstrapRecord['timeStart'] = microtime(true);
         self::$bootstrapRecord['memStart'] = memory_get_usage();
+//        self::$bootstrapRecord['includedFiles'] = get_included_files();
     }
 
     /**
@@ -246,5 +249,9 @@ class Profiler
         $currentRecord['memEnd'] = memory_get_usage();
         $currentRecord['memPeak'] = memory_get_peak_usage();
         $currentRecord['isEnded']  = true;
+        $includedFiles = get_included_files();
+        $currentRecord['includedFiles'] = array_slice($includedFiles, $this->includedFilesCount);
+        $this->includedFilesCount = count($includedFiles);
+        $currentRecord['test'] = '';
     }
 }

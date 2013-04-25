@@ -65,7 +65,8 @@ class Reporter
                     'timeDiffMs' => round($taskTime * 1000),
                     'timeDiffPercentage' => round(($taskTime / $totalTime) * 100),
                     'timeTotalMs' => $totalTimeCurrent,
-                    'isExternal' => $record['isExternal']
+                    'isExternal' => $record['isExternal'],
+                    'includedFiles' => $record['includedFiles']
                 );
             }
 
@@ -149,10 +150,17 @@ TEXT;
             }
             $nameFormatted = substr($name, 0, 69);
 
+            $includedFilesFormatted = implode(PHP_EOL, $record['includedFiles']);
+
+            $includedFilesFormatted = str_replace('/opt/www-on-host/OpenConext-engineblock/', '', $includedFilesFormatted);
+
             // Colorize name with color of time or memory
             if ($nameColorCode) {
                 $nameFormatted = $this->colorString($nameFormatted, $nameColorCode);
+                $includedFilesFormatted = $this->colorString($includedFilesFormatted, $nameColorCode);
             }
+
+            $includedFilesFormatted = '';
 
             $tableData[] = array(
                 $numberFormatted,
@@ -162,7 +170,8 @@ TEXT;
                 $memDiffFormatted,
                 $memDiffPercentageFormatted,
                 $memPeakFormatted,
-                $nameFormatted
+                $nameFormatted,
+                $includedFilesFormatted
             );
         }
 
@@ -174,7 +183,8 @@ TEXT;
             'Memo diff.',
             'Memo diff. percentage',
             'Peak mem',
-            'Title'
+            'Title',
+            'Included Files'
         );
         $table = new \cli\Table();
         $table->setHeaders($headers);
