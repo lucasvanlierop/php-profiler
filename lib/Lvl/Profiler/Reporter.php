@@ -232,8 +232,8 @@ TEXT;
     public function logReport(array $records, array $metadata)
     {
         $logCallback = $this->logCallback;
-        foreach (explode(PHP_EOL, $this->getReport($records, $metadata)) as $line) {
-            $logCallback($line);
+        foreach (explode(PHP_EOL, $this->createReport($records, $metadata)) as $line) {
+            $logCallback($line . PHP_EOL);
         }
     }
 }
