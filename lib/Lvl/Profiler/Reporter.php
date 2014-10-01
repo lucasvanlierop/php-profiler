@@ -1,6 +1,10 @@
 <?php
 namespace Lvl\Profiler;
 
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\OutputInterface;
+
 $vendorDir = realpath(__DIR__ . '/../../../../../');
 require $vendorDir .'/jlogsdon/cli/lib/cli/cli.php';
 \cli\register_autoload();
@@ -10,10 +14,9 @@ require $vendorDir .'/jlogsdon/cli/lib/cli/cli.php';
  */
 class Reporter
 {
-    const FOREGROUND_COLOR_CODE_YELLOW = '%Y';
-    const FOREGROUND_COLOR_CODE_RED = '%r';
-    const FOREGROUND_COLOR_CODE_BROWN = '%y';
-    const COLOR_END = '%n';
+    const FOREGROUND_COLOR_CODE_YELLOW = 'fg=yellow';
+    const FOREGROUND_COLOR_CODE_RED = 'fg=red';
+    const FOREGROUND_COLOR_CODE_BROWN = 'fg=brown;options=bold';
 
     /** @var callable */
     private $logCallback;
@@ -31,7 +34,7 @@ class Reporter
      * @param array $metadata
      * @return string
      */
-    public function printReport(array $records, array $metadata)
+    public function createReport(array $records, array $metadata)
     {
         $topTimes = array();
         $timeStart = $records[0]['timeStart'];
@@ -99,8 +102,6 @@ Profiling finished: {$totalTimeFormatted}s total, {$totalExternalTimeFormatted}s
 {$metadataFormatted}
 
 TEXT;
-
-        echo $report;
 
         $tableData = array();
 
@@ -186,12 +187,15 @@ TEXT;
             'Title',
             'Included Files'
         );
-        $table = new \cli\Table();
+        $output = new BufferedOutput();
+        $table = new Table($output);
         $table->setHeaders($headers);
         $table->setRows($tableData);
 
         // @todo find out how to return this
-        $table->display();
+        $table->render();
+
+        return $report . $output->fetch();
     }
 
     /**
@@ -212,15 +216,16 @@ TEXT;
     }
 
     /**
-     * Adds tokens that will be replaced by \cli\Colors::colorize()
+     * Adds tokens that will be replaced by Symfon Console
      *
      * @param string $string
      * @param string $colorCode
      * @return string
+     * @todo colors are removed by symfony tabe
      */
     private function colorString($string, $colorCode)
     {
-        return $colorCode . $string . self::COLOR_END;
+        return "<{$colorCode}>{$string}</{$colorCode}>";
     }
 
     /**
