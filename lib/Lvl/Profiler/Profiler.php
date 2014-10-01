@@ -38,6 +38,7 @@ class Profiler
 
     public function __construct()
     {
+        $this->metadata = array();
         $this->records = array();
 
         if (self::$bootstrapRecord) {
