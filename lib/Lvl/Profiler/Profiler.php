@@ -60,7 +60,7 @@ class Profiler
     public static function getInstance()
     {
         if (empty(self::$instance)) {
-            throw new Exception('Profiler is not yet instantiated');
+            self::$instance = new self();
         }
 
         return self::$instance;
