@@ -5,10 +5,6 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
-$vendorDir = realpath(__DIR__ . '/../../../../../');
-require $vendorDir .'/jlogsdon/cli/lib/cli/cli.php';
-\cli\register_autoload();
-
 /**
  * @todo Move Logging functions to a separate class
  */
