@@ -11,7 +11,7 @@ class Reporter
 {
     const FOREGROUND_COLOR_CODE_YELLOW = 'fg=yellow';
     const FOREGROUND_COLOR_CODE_RED = 'fg=red';
-    const FOREGROUND_COLOR_CODE_BROWN = 'fg=brown;options=bold';
+    const FOREGROUND_COLOR_CODE_BROWN = 'fg=red;options=bold';
 
     /** @var callable */
     private $logCallback;
