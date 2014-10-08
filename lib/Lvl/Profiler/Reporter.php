@@ -3,7 +3,6 @@ namespace Lvl\Profiler;
 
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @todo Move Logging functions to a separate class
