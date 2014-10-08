@@ -36,6 +36,11 @@ class Profiler
 
     private static $instance;
 
+    /**
+     * @var callable
+     */
+    private $shutdownFunction;
+
     public function __construct()
     {
         $this->metadata = array();
@@ -149,6 +154,10 @@ class Profiler
         return $this->isStarted;
     }
 
+    /**
+     * @return Profiler $this
+     * @throws Exception
+     */
     public function start()
     {
         if ($this->isStarted()) {
@@ -157,6 +166,8 @@ class Profiler
 
         $this->addRecord(self::RECORD_NAME_START);
         $this->isStarted = true;
+
+        return $this;
     }
 
     /**
@@ -254,5 +265,29 @@ class Profiler
         $currentRecord['includedFiles'] = array_slice($includedFiles, $this->includedFilesCount);
         $this->includedFilesCount = count($includedFiles);
         $currentRecord['test'] = '';
+    }
+
+    /**
+     * Registers a callable as shutdown function which can be used to end the profiler.
+     *
+     * @param callable $shutdownFunction
+     * @return Profiler $this
+     */
+    public function registerShutdownFunction($shutdownFunction)
+    {
+        $this->shutdownFunction = $shutdownFunction;
+        register_shutdown_function($shutdownFunction);
+
+        return $this;
+    }
+
+    /**
+     * Can be used to call the shutdown function when the shutdown function has been reset.
+     *
+     * @return callable
+     */
+    public function shutdown()
+    {
+        call_user_func($this->shutdownFunction);
     }
 }
